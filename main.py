@@ -1,8 +1,8 @@
-from clases import Estudiante,Profesor,Curso
-
+from clases import *
+from funciones import registrar_profesor
 # ----------------- BLOQUE PRINCIPAL -----------------
 
-# ALUMNOS Y PROFESORES CARGADOS DE ARRANQUE:
+# ALUMNOS, PROFESORES Y ARCHIVOS CARGADOS DE ARRANQUE:
 estudiante1 = Estudiante("1000", 2023, "Lucas", "Ochoa", "lucasochoa@gmail.com", "1234")
 Estudiante.estudiantes.append(estudiante1)
 estudiante2 = Estudiante("1001", 2023, "Jorge", "Maslaton", "jorgemaslaton@gmail.com", "asd")
@@ -13,7 +13,6 @@ profesor1 = Profesor("Ingeniero en Sistemas", 2017, "Abelardo", "Varela", "turbo
 Profesor.profesores.append(profesor1)
 profesor2 = Profesor("Profesorado en Computacion", 2010, "Bryan", "Shelby", "lsrp@gmail.com", "piyicones")
 Profesor.profesores.append(profesor2)
-
 
 # -------------------MENU PRINCIPAL ----------------#
 
@@ -33,7 +32,7 @@ while opcion != 4:
         email_encontrado = False
         contrasenia_encontrada = False
         for e in Estudiante.estudiantes:
-            if email == e.email:
+            if email == e._email:
                 if e.validar_credenciales(email, contrasenia) == True:
                     print("Verificado")
                     contrasenia_encontrada = True
@@ -48,7 +47,8 @@ while opcion != 4:
                             e.matricular_en_curso()
                         elif sub_opcion_alumno == 2:
                             for indice, curso in enumerate(e.get_mis_cursos()):
-                                print(f"{indice + 1}. {curso.get_nombre()}")
+                                print(f"{indice + 1}. {curso.get_nombre}") #error en el print
+                            
                         elif sub_opcion_alumno == 3:
                             print("Volviendo al menú principal...")
                             break
@@ -61,13 +61,13 @@ while opcion != 4:
         
     elif opcion == 2:
         print("Usted está por ingresar como profesor")
-        email = str(input("Ingrese el mail: "))
-        contrasenia = str(input("Ingrese su contraseña: "))
+        _email = str(input("Ingrese el mail: "))
+        _contrasenia = str(input("Ingrese su contraseña: "))
         email_encontrado = False
         contrasenia_encontrada = False
         for p in Profesor.profesores:
-            if email == p.email:
-                if p.validar_credenciales(email, contrasenia) == True:
+            if _email == p._email:
+                if p.validar_credenciales(_email, _contrasenia) == True:
                     print("Verificado")
                     contrasenia_encontrada = True
                     # -------------------SUB-MENU PROFESOR ----------------#
@@ -80,7 +80,7 @@ while opcion != 4:
                         if sub_opcion_profesor == 1:
                             p.dictar_curso()
                         elif sub_opcion_profesor == 2:
-                            print(f"Listado de cursos dictados por {p.nombre}:")
+                            print(f"Listado de cursos dictados por {p._nombre}:")
                             for c in p.get_mis_cursos():
                                 print(f"{c}.")
                         elif sub_opcion_profesor == 3:
@@ -91,16 +91,18 @@ while opcion != 4:
                     "Error: contraseña incorrecta."
                 email_encontrado = True
         if email_encontrado == False:
-            print("El email ingresado no existe, debe darse de alta en Alumnado.")            
-                
-                
+            print("El email ingresado no existe.")
+            dar_alta = str(input("Ingrese la contraseña para darse de alta como profesor: "))   
+            if dar_alta == "admin":
+                registrar_profesor()
+                print("Profesor registrado exitosamente.")
                 
     elif opcion == 3:
         print("Cursos disponibles:")
-        lista_cursos_ordenada = sorted(Curso.cursos, key=lambda x: x._nombre)
+        lista_cursos_ordenada = sorted(Curso.cursos, key=lambda x: x.get_nombre)
         for curso in lista_cursos_ordenada:
             print("-"*10)
-            print(f"Nombre: {curso._nombre}, Carrera: Tecnicatura Universitaria en Programación")
+            print(f"Nombre: {curso.get_nombre()}, Carrera: Tecnicatura Universitaria en Programación")
         
     else:
         print("Saliendo del sistema...")
