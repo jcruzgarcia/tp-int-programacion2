@@ -1,4 +1,4 @@
-from generador_contra import generar_contrasenia
+from generadores import generar_contrasenia
 from abc import ABC
 import datetime
 
@@ -40,13 +40,14 @@ class Estudiante(Usuario):
         self._mis_cursos = []
     def __str__(self) -> str:
        return f"Legajo: {self.__legajo}, Año: {self.__anio_inscripcion_carrera}"
+   
     def matricular_en_curso(self):
         lista_cursos = Curso.cursos
         for indice, curso in enumerate(lista_cursos):
-            print(f"{indice + 1}. {curso.get_nombre}")
-        indice_matriculacion_curso = int(input("Ingrese el índice de un curso para matricularse:"))
+            print(f"{indice + 1}. {curso.get_nombre()}")
+        indice_curso = int(input("Ingrese el índice de un curso para matricularse: "))
         for indice, curso in enumerate(lista_cursos):
-            if (indice + 1) == indice_matriculacion_curso:
+            if (indice + 1) == indice_curso:
                 if curso in self._mis_cursos:
                     print("Usted ya se encuentra matriculado en esta materia.")
                 else:
@@ -60,7 +61,18 @@ class Estudiante(Usuario):
                             print("Clave incorrecta.")
                         
     def desmatricular_curso(self):
-        pass                         #completar------------------------------------------------------
+        lista_cursos = Curso.cursos
+        for indice, curso in enumerate(lista_cursos):
+            print(f"{indice + 1}. {curso.get_nombre()}")
+        indice_curso = int(input("Ingrese el índice de un curso para desmatricularse: "))
+        for indice, curso in enumerate(lista_cursos):
+            if (indice + 1) == indice_curso:
+                if curso in self._mis_cursos:
+                    self._mis_cursos.remove(curso)
+                    print("Se ha desmatriculado con éxito del curso.")
+                else:
+                   print("El índice ingresado no pertenece a ningún curso.")
+                            
     def get_legajo(self):
         return self.__legajo
     def get_anio_inscripcion_carrera(self):
@@ -78,16 +90,18 @@ class Profesor(Usuario):
         self._mis_cursos = []
     def __str__(self) -> str:
         return f"Titulo: {self.__titulo}, Año Egreso: {self.__anio_egreso}"
+    
     def dictar_curso(self):
         nuevo_curso = str(input("Ingrese el nombre del curso: "))
         nueva_contrasenia = generar_contrasenia(6)
-        print(f"Se ha creado el siguiente curso exitosamente.")
-        print("Nombre: ", nuevo_curso)
-        print("Contraseña: ", nueva_contrasenia)
         curso_creado = Curso(nuevo_curso, nueva_contrasenia) 
         Curso.cursos.append(curso_creado) 
         self._mis_cursos.append(curso_creado)
-        print(curso_creado) 
+        print(f"Se ha creado el siguiente curso exitosamente.")
+        print("Nombre: ", nuevo_curso)
+        print("Contraseña: ", nueva_contrasenia)
+        print("Código del curso:", curso_creado.get_codigo())
+        
     def get_titulo(self):
         return self.__titulo
     def get_anio_egreso(self):
@@ -98,29 +112,36 @@ class Profesor(Usuario):
     
 class Curso():
     cursos = []
+    __prox_cod = 1
+    
     def __init__(self, __nombre: str, __contrasenia_matriculacion: str):
-        #self.__prox_cod = __prox_cod
         self.__nombre = __nombre
-        #self.__codigo = __codigo
+        __codigo =Curso.__prox_cod
+        self.__codigo = __codigo
         self.__contrasenia_matriculacion = __contrasenia_matriculacion
+        Curso.__prox_cod += 1
+        
     def __str__(self) -> str:
         return f"Codigo:{self.__codigo}, Nombre del curso: {self.__nombre}, Contraseña de matriculación: {self.__contrasenia_matriculacion}"
 
-    def __generar_contrasenia(self):
-        return self.__generar_contrasenia(6)
+    @classmethod
+    def __generar_contrasenia(cls):
+        return cls.__generar_contrasenia(6)
+    
     def nuevo_archivo(self):
         nombre = str(input("Ingresa el nombre del archivo:"))
-        fecha = input("Ingrese una fecha en formato: YYYY-MM-DD")
-        cargar_fecha = datetime.strptime(fecha, "%Y-%m-%d")
+        fecha = datetime.now()
         formato = str("pdf")
-        nuevo_archivo = Archivo(nombre, cargar_fecha, formato)
-        archivos = []
+        nuevo_archivo = Archivo(nombre, fecha, formato)
+        archivos = []               #REVISAR ----------------------------
         archivos.append(nuevo_archivo)
         
     def get_nombre(self):
         return self.__nombre
     def get_contrasenia_matriculacion(self):
         return self.__contrasenia_matriculacion
+    def get_codigo(self):
+        return self.__codigo
     
 class Carrera():
     def __init__(self, __nombre: str, __cant_anios: int):

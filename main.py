@@ -17,6 +17,7 @@ Profesor.profesores.append(profesor2)
 # -------------------MENU PRINCIPAL ----------------#
 
 opcion = 0
+
 while opcion != 4:
     print("Menú:")
     print("1. Ingresar como alumno")
@@ -38,20 +39,30 @@ while opcion != 4:
                     contrasenia_encontrada = True
             # -------------------SUB-MENU ALUMNOS ----------------#
                     sub_opcion_alumno = 0
-                    while sub_opcion_alumno !=3:
+                    while sub_opcion_alumno !=4:
                         print("1. Matricularse a un curso")
-                        print("2. Ver curso")
-                        print("3. Volver al menú principal")
-                        sub_opcion_alumno = int(input("Selecciona una opción (1/2/3)"))
+                        print("2. Desmatricularse a un curso")
+                        print("3. Ver curso")
+                        print("4. Volver al menú principal")
+                        sub_opcion_alumno = int(input("Selecciona una opción (1/2/3) \n"))
                         if sub_opcion_alumno == 1:
                             e.matricular_en_curso()
                         elif sub_opcion_alumno == 2:
+                            e.desmatricular_curso()
+                        elif sub_opcion_alumno == 3:    
                             for indice, curso in enumerate(e.get_mis_cursos()):
-                                print(f"{indice + 1}. {curso.get_nombre}") #error en el print
-                            
-                        elif sub_opcion_alumno == 3:
+                                print(f"{indice + 1}. {curso.get_nombre()}") 
+                            indice_curso = int(input("Ingrese el índice de un curso para ver sus archivos: "))
+                            for indice, curso in enumerate(e.get_mis_cursos()):
+                                if (indice + 1) == indice_curso:
+                                    print(f"Nombre del curso:{curso.get_nombre()} \n Listado de archivos del curso: ")# aca faltaría llamar a la lista de archivos (de ese curso en especifico)
+                                else:
+                                    print("El índice ingresado no coincide con ningun curso.")
+                        elif sub_opcion_alumno == 4:         
                             print("Volviendo al menú principal...")
                             break
+                        else:
+                            print("Ingrese una opción válida")
                 if contrasenia_encontrada == False:
                     "Error: contraseña incorrecta."
                     email_encontrado = True
@@ -76,17 +87,32 @@ while opcion != 4:
                         print("1. Dictar curso")
                         print("2. Ver curso")
                         print("3. Volver al menú principal")
-                        sub_opcion_profesor = int(input("Selecciona una opción (1/2/3)"))
+                        sub_opcion_profesor = int(input("Selecciona una opción (1/2/3) \n"))
                         if sub_opcion_profesor == 1:
                             p.dictar_curso()
                         elif sub_opcion_profesor == 2:
                             print(f"Listado de cursos dictados por {p._nombre}:")
-                            for c in p.get_mis_cursos():
-                                print(f"{c}.")
+                            for indice, c in enumerate(p.get_mis_cursos()):
+                                print(f"{indice + 1}. {c.get_nombre()}")
+                            indice_curso = int(input("Ingrese el índice de un curso para ver sus datos: "))
+                            for indice, c in enumerate(p.get_mis_cursos()):
+                                if (indice + 1) == indice_curso:
+                                    if c in p.get_mis_cursos():
+                                        print(f"Nombre del curso: {c.get_nombre()} \n Contraseña: {c.get_contrasenia_matriculacion()} \n Código: {c.get_codigo()} \n Cantidad de archivos:") #faltaria agregar llamada a cant de archivos
+                                    #REVISAR ----------------------------
+                                    while True:
+                                        agregar_adjunto = int (input("¿Desea agregar un archivo adjunto? \n 1. Si \n 2.No"))
+                                        if agregar_adjunto == 1:
+                                            c.nuevo_archivo()
+                                        elif agregar_adjunto == 2:
+                                            break
+                                        else:
+                                            print("Seleccione una opción válida")
                         elif sub_opcion_profesor == 3:
                             print("Volviendo al menú principal...")
                             break
-                            
+                        else:
+                            print("Ingrese una opción válida")
                 if contrasenia_encontrada == False:
                     "Error: contraseña incorrecta."
                 email_encontrado = True
