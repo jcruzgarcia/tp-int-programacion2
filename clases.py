@@ -1,6 +1,6 @@
 from generadores import generar_contrasenia
 from abc import ABC
-import datetime
+from datetime import datetime
 
 class Usuario(ABC):
     def __init__(self, nombre: str, apellido: str, email: str, contrasenia: str):
@@ -120,6 +120,8 @@ class Curso():
         self.__codigo = __codigo
         self.__contrasenia_matriculacion = __contrasenia_matriculacion
         Curso.__prox_cod += 1
+        self.archivos = []
+        self.cant_archivos = 0
         
     def __str__(self) -> str:
         return f"Codigo:{self.__codigo}, Nombre del curso: {self.__nombre}, Contraseña de matriculación: {self.__contrasenia_matriculacion}"
@@ -133,8 +135,7 @@ class Curso():
         fecha = datetime.now()
         formato = str("pdf")
         nuevo_archivo = Archivo(nombre, fecha, formato)
-        archivos = []               #REVISAR ----------------------------
-        archivos.append(nuevo_archivo)
+        self.archivos.append(nuevo_archivo)
         
     def get_nombre(self):
         return self.__nombre

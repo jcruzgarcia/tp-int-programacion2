@@ -9,3 +9,6 @@ def registrar_profesor():
     anio_egreso = str(input("Ingrese el año de egreso: "))
     nuevo_profesor = Profesor(titulo,anio_egreso,nombre,apellido,email,contrasenia)
     Profesor.profesores.append(nuevo_profesor)
+    
+    
+        

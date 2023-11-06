@@ -55,7 +55,9 @@ while opcion != 4:
                             indice_curso = int(input("Ingrese el índice de un curso para ver sus archivos: "))
                             for indice, curso in enumerate(e.get_mis_cursos()):
                                 if (indice + 1) == indice_curso:
-                                    print(f"Nombre del curso:{curso.get_nombre()} \n Listado de archivos del curso: ")# aca faltaría llamar a la lista de archivos (de ese curso en especifico)
+                                    print(f"Nombre del curso:{curso.get_nombre()}")# aca faltaría llamar a la lista de archivos (de ese curso en especifico)
+                                    for archivo in curso.archivos:
+                                        print(f"{archivo.get_nombre()}.{archivo.get_formato()}")
                                 else:
                                     print("El índice ingresado no coincide con ningun curso.")
                         elif sub_opcion_alumno == 4:         
@@ -83,6 +85,7 @@ while opcion != 4:
                     contrasenia_encontrada = True
                     # -------------------SUB-MENU PROFESOR ----------------#
                     sub_opcion_profesor = 0
+                    cant_archivos = 0
                     while sub_opcion_profesor != 3:
                         print("1. Dictar curso")
                         print("2. Ver curso")
@@ -98,12 +101,13 @@ while opcion != 4:
                             for indice, c in enumerate(p.get_mis_cursos()):
                                 if (indice + 1) == indice_curso:
                                     if c in p.get_mis_cursos():
-                                        print(f"Nombre del curso: {c.get_nombre()} \n Contraseña: {c.get_contrasenia_matriculacion()} \n Código: {c.get_codigo()} \n Cantidad de archivos:") #faltaria agregar llamada a cant de archivos
-                                    #REVISAR ----------------------------
+                                        print(f"Nombre del curso: {c.get_nombre()} \n Contraseña: {c.get_contrasenia_matriculacion()} \n Código: {c.get_codigo()} \n Cantidad de archivos: {cant_archivos}") 
                                     while True:
-                                        agregar_adjunto = int (input("¿Desea agregar un archivo adjunto? \n 1. Si \n 2.No"))
+                                        agregar_adjunto = int (input("¿Desea agregar un archivo adjunto? \n 1. Si \n 2.No \n"))
                                         if agregar_adjunto == 1:
                                             c.nuevo_archivo()
+                                            c.cant_archivos += 1
+                                            print(f"Nombre del curso: {c.get_nombre()} \n Contraseña: {c.get_contrasenia_matriculacion()} \n Código: {c.get_codigo()} \n Cantidad de archivos: {c.cant_archivos}")
                                         elif agregar_adjunto == 2:
                                             break
                                         else:
